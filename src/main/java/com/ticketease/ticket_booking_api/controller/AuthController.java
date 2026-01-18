@@ -1,5 +1,7 @@
 package com.ticketease.ticket_booking_api.controller;
 
+import com.ticketease.ticket_booking_api.dto.AuthResponse;
+import com.ticketease.ticket_booking_api.dto.LoginRequest;
 import com.ticketease.ticket_booking_api.dto.RegisterRequest;
 import com.ticketease.ticket_booking_api.service.AuthService;
 import org.springframework.http.HttpStatus;
@@ -23,5 +25,11 @@ public class AuthController {
     public ResponseEntity<String> register(@RequestBody RegisterRequest request) {
         String response = authService.register(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
+        AuthResponse response = authService.login(request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
