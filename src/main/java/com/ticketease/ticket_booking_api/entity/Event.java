@@ -42,5 +42,11 @@ public class Event {
     @JoinColumn(name = "venue_id", nullable = false)
     private Venue venue;
 
+    @Column(nullable = false)
+    private int totalCapacity;
+
+    @Column(nullable = false)
+    private int soldTickets = 0;
+
 
 }
