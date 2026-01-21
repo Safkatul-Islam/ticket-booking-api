@@ -1,8 +1,10 @@
 package com.ticketease.ticket_booking_api.service;
 
+import com.ticketease.ticket_booking_api.dto.TicketResponseDto;
 import com.ticketease.ticket_booking_api.entity.Event;
 import com.ticketease.ticket_booking_api.entity.Ticket;
 import com.ticketease.ticket_booking_api.entity.User;
+import com.ticketease.ticket_booking_api.mapper.TicketMapper;
 import com.ticketease.ticket_booking_api.repository.EventRepository;
 import com.ticketease.ticket_booking_api.repository.TicketRepository;
 import com.ticketease.ticket_booking_api.repository.UserRepository;
@@ -18,17 +20,20 @@ public class BookingService {
     private final TicketRepository ticketRepository;
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
+    private final TicketMapper ticketMapper;
 
     public BookingService(TicketRepository ticketRepository,
                           UserRepository userRepository,
-                          EventRepository eventRepository) {
+                          EventRepository eventRepository,
+                          TicketMapper ticketMapper) {
         this.ticketRepository = ticketRepository;
         this.userRepository = userRepository;
         this.eventRepository = eventRepository;
+        this.ticketMapper = ticketMapper;
     }
 
     @Transactional  // Important: Either everything happens, or nothing happens.
-    public Ticket bookTicket(Long eventId, String userEmail) {
+    public TicketResponseDto bookTicket(Long eventId, String userEmail) {
         // Find the Event
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new RuntimeException("Event not found"));
@@ -54,17 +59,26 @@ public class BookingService {
         eventRepository.save(event);
 
         // Save Ticket
-        return ticketRepository.save((ticket));
+        Ticket savedTicket = ticketRepository.save(ticket);
+
+        //
+        return ticketMapper.mapToDto(savedTicket);
     }
 
-    public List<Ticket> getAllTicketsForUser(Long userId) {
-
+    public List<TicketResponseDto> getMyTickets(String userEmail) {
         try {
-            User user = userRepository.findById(userId)
+            // Find the User by Email (to get their ID)
+            User user = userRepository.findByEmail(userEmail)
                     .orElseThrow(() -> new RuntimeException("User Not found"));
-        } catch (Exception e) {
 
+            // Use the Repository method we created earlier
+            List<Ticket> tickets = ticketRepository.findByUserId(user.getId());
+
+            return tickets.stream()
+                    .map(ticketMapper::mapToDto)
+                    .toList();
+        } catch (RuntimeException e) {
+            return List.of();
         }
-        return ticketRepository.findByUserId(userId);
     }
 }
