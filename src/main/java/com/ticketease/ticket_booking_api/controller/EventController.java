@@ -38,4 +38,9 @@ public class EventController {
         Event newEvent = eventService.createEvent(eventDto);
         return new ResponseEntity<>(newEvent, HttpStatus.CREATED);
     }
+
+    @GetMapping("/venues")
+    public ResponseEntity<List<Venue>> getAllVenues() {
+        return ResponseEntity.ok(eventService.getAllVenues());
+    }
 }
