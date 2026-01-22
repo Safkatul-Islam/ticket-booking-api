@@ -1,7 +1,6 @@
 package com.ticketease.ticket_booking_api.controller;
 
 import com.ticketease.ticket_booking_api.dto.TicketResponseDto;
-import com.ticketease.ticket_booking_api.entity.Ticket;
 import com.ticketease.ticket_booking_api.service.BookingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
