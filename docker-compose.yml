@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: ticketease-db
+    environment:
+      POSTGRES_USER: ticketease
+      POSTGRES_PASSWORD: password123
+      POSTGRES_DB: ticket_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+
+  app:
+    build: .
+    container_name: ticketease-app
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/ticket_db
+      SPRING_DATASOURCE_USERNAME: ticketease
+      SPRING_DATASOURCE_PASSWORD: password123
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:

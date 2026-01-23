@@ -43,6 +43,7 @@ public class EventService {
         event.setDescription(eventDto.getDescription());
         event.setEventDate(eventDto.getEventDate());
         event.setPrice(eventDto.getPrice());
+        event.setTotalCapacity(venue.getCapacity());
 
         // Link the Relationship
         event.setVenue(venue);
