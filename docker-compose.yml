@@ -1,6 +1,8 @@
 version: '3.8'
 
 services:
+  # Service 1: The Database
+  # Replacing your local pgAdmin/Postgres installation with this container.
   postgres:
     image: postgres:15-alpine
     container_name: ticketease-db
@@ -9,22 +11,24 @@ services:
       POSTGRES_PASSWORD: password123
       POSTGRES_DB: ticket_db
     ports:
-      - "5432:5432"
+      - "5432:5432"  # Maps container port 5432 to laptop port 5432
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data  # Persist data so it doesn't vanish when we restart
 
-
+  # Service 2: Your Application
   app:
-    build: .
+    build: .  # Build the Dockerfile in the current directory
     container_name: ticketease-app
-    ports:
-      - "8080:8080"
     environment:
+      # CRITICAL: Override the application.properties settings here!
+      # Instead of 'localhost', we use the service name 'postgres' defined above.
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/ticket_db
       SPRING_DATASOURCE_USERNAME: ticketease
       SPRING_DATASOURCE_PASSWORD: password123
+    ports:
+      - "8080:8080"
     depends_on:
-      - postgres
+      - postgres  # Wait for DB to start before starting App
 
 volumes:
-  postgres_data:
+  postgres_data:  # Define the storage volume
