@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # Service 1: The Database
   # Replacing your local pgAdmin/Postgres installation with this container.
@@ -17,7 +15,8 @@ services:
 
   # Service 2: Your Application
   app:
-    build: .  # Build the Dockerfile in the current directory
+    # build: .   Build the Dockerfile in the current directory
+    image: shafkat4/ticketease-app:latest
     container_name: ticketease-app
     environment:
       # CRITICAL: Override the application.properties settings here!
