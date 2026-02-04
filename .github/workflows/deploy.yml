@@ -70,4 +70,4 @@ jobs:
             docker compose pull
             
             # 3. Restart (Docker will automatically read the .env file!)
-            docker compose up -d
+            docker compose up -d --remove-orphans
