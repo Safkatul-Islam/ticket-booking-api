@@ -1,17 +1,17 @@
 services:
   # Service 1: The Database
   # Replacing your local pgAdmin/Postgres installation with this container.
-  postgres:
-    image: postgres:15-alpine
-    container_name: ticketease-db
-    environment:
-      POSTGRES_USER: ticketease
-      POSTGRES_PASSWORD: password123
-      POSTGRES_DB: ticket_db
-    ports:
-      - "5432:5432"  # Maps container port 5432 to laptop port 5432
-    volumes:
-      - postgres_data:/var/lib/postgresql/data  # Persist data so it doesn't vanish when we restart
+#  postgres:
+#    image: postgres:15-alpine
+#    container_name: ticketease-db
+#    environment:
+#      POSTGRES_USER: ticketease
+#      POSTGRES_PASSWORD: password123
+#      POSTGRES_DB: ticket_db
+#    ports:
+#      - "5432:5432"  # Maps container port 5432 to laptop port 5432
+#    volumes:
+#      - postgres_data:/var/lib/postgresql/data  # Persist data so it doesn't vanish when we restart
 
   # Service 2: Your Application
   app:
@@ -21,13 +21,14 @@ services:
     environment:
       # CRITICAL: Override the application.properties settings here!
       # Instead of 'localhost', we use the service name 'postgres' defined above.
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/ticket_db
-      SPRING_DATASOURCE_USERNAME: ticketease
-      SPRING_DATASOURCE_PASSWORD: password123
+      # Docker will pull these values from the .env file we created in the GitHub Action
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
     ports:
       - "8080:8080"
-    depends_on:
-      - postgres  # Wait for DB to start before starting App
+#    depends_on:
+#      - postgres  # Wait for DB to start before starting App
 
-volumes:
-  postgres_data:  # Define the storage volume
+#volumes:
+#  postgres_data:  # Define the storage volume
