@@ -42,13 +42,13 @@ jobs:
             
       # 6. Copy docker-compose.yml to AWS Server
       # Only need this one file on the server now!
-      - name: Copy docker-compose to Server
+      - name: Copy docker-compose to Server & Copy Config Files
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: "docker-compose.yml"
+          source: "docker-compose.yml,Caddyfile"
           target: "/home/ubuntu/ticket-booking-api/"
 
       # 7. Deploy to AWS (SSH & Restart)

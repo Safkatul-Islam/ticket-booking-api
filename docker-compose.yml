@@ -26,9 +26,28 @@ services:
       SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
     ports:
-      - "8080:8080"
+      - "8080"
 #    depends_on:
 #      - postgres  # Wait for DB to start before starting App
 
+  caddy:
+    image: caddy:2-alpine
+    container_name: ticketease-caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile  # Mount config
+      - caddy_data:/data                  # Persist SSL certificates
+      - caddy_config:/config
+    depends_on:
+        - app
+
 #volumes:
 #  postgres_data:  # Define the storage volume
+
+volumes:
+  # ... other volumes ...
+  caddy_data:
+  caddy_config:

@@ -1,0 +1,4 @@
+# Replace this with your actual DuckDNS domain
+bookticket.duckdns.org {
+    reverse_proxy app:8080
+}
